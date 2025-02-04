@@ -42,7 +42,7 @@ function drawLabels(data) {
         let text = Object.values(row).join(" ");
         let lines = wrapText(ctx, text, maxLineWidth);
 
-        let lineHeight = 70; // Line spacing
+        let lineHeight = 80; // Line spacing
         let startY = y - (lines.length - 1) * lineHeight / 2; // Center the text block
 
         lines.forEach((line, i) => {
