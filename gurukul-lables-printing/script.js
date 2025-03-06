@@ -20,34 +20,43 @@ function drawLabels(data) {
     const ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "black";
-    ctx.font = "90px Arial"; // Adjusted for better text fitting
-    ctx.textAlign = "center";  
-    ctx.textBaseline = "middle"; 
+    ctx.font = "90px Arial";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
 
     const columns = 3;
-    const rows = 8;
+    const rows = 8;   
+
+
+
+     
     const labelWidth = canvas.width / columns;
     const labelHeight = canvas.height / rows;
-    const maxLineWidth = labelWidth * 0.9; // Leave some margin
+    const maxLineWidth = labelWidth * 0.9;
 
     data.forEach((row, index) => {
         let col = index % columns;
         let rowNum = Math.floor(index / columns);
 
-        if (rowNum >= rows) return; // Prevent extra rows
+        if (rowNum >= rows) return;
 
-        let x = col * labelWidth + labelWidth / 2;  
-        let y = rowNum * labelHeight + labelHeight / 2; 
+        let x = col * labelWidth + labelWidth / 2;
+        let y = rowNum * labelHeight + labelHeight / 2;
 
         let text = Object.values(row).join(" ");
         let lines = wrapText(ctx, text, maxLineWidth);
 
-        let lineHeight = 80; // Line spacing
-        let startY = y - (lines.length - 1) * lineHeight / 2; // Center the text block
+        let lineHeight = 80;
+        let startY = y - (lines.length - 1) * lineHeight / 2;
 
         lines.forEach((line, i) => {
             ctx.fillText(line, x, startY + i * lineHeight);
         });
+
+        // Add note below the label
+        ctx.font = "40px Arial"
+        ctx.fillText("ભગવાનને થાળમાં ધરાવવાનું બાકી છે", x, startY + lines.length * lineHeight);
+        ctx.font = "90px Arial"
     });
 }
 
