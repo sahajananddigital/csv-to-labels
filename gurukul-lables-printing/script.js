@@ -15,41 +15,99 @@ function handleFileUpload(event) {
     reader.readAsText(file);
 }
 
+// function drawLabels(data) {
+//     const canvas = document.getElementById("labelsCanvas");
+//     const ctx = canvas.getContext("2d");
+//     ctx.clearRect(0, 0, canvas.width, canvas.height);
+//     ctx.fillStyle = "black";
+//     ctx.font = "70px Arial"; // Adjusted for better text fitting
+//     ctx.textAlign = "center";  
+//     ctx.textBaseline = "middle"; 
+
+//     const columns = 3;
+//     const rows = 8;
+//     const labelWidth = canvas.width / columns;
+//     const labelHeight = canvas.height / rows;
+//     const maxLineWidth = labelWidth * 0.9; // Leave some margin
+
+//     data.forEach((row, index) => {
+//         let col = index % columns;
+//         let rowNum = Math.floor(index / columns);
+
+//         if (rowNum >= rows) return; // Prevent extra rows
+
+//         let x = col * labelWidth + labelWidth / 2;  
+//         let y = rowNum * labelHeight + labelHeight / 2; 
+
+//         let text = Object.values(row).join(" ");
+//         let lines = wrapText(ctx, text, maxLineWidth);
+
+//         let lineHeight = 80; // Line spacing
+//         let startY = y - (lines.length - 1) * lineHeight / 2; // Center the text block
+
+//         lines.forEach((line, i) => {
+//             ctx.fillText(line, x, startY + i * lineHeight);
+//         });
+//     });
+// }
+
 function drawLabels(data) {
     const canvas = document.getElementById("labelsCanvas");
     const ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "black";
-    ctx.font = "90px Arial"; // Adjusted for better text fitting
-    ctx.textAlign = "center";  
-    ctx.textBaseline = "middle"; 
+    ctx.font = "70px Arial";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
 
     const columns = 3;
     const rows = 8;
-    const labelWidth = canvas.width / columns;
-    const labelHeight = canvas.height / rows;
-    const maxLineWidth = labelWidth * 0.9; // Leave some margin
+
+    const topMargin = 100;
+    const bottomMargin = 100;
+    const columnMargin = 20;
+
+    // Full canvas dimensions
+    const totalWidth = canvas.width;
+    const totalHeight = canvas.height;
+
+    // Calculate width accounting for margins
+    const totalColumnMargins = (columns - 1) * columnMargin;
+    const labelWidth = (totalWidth - totalColumnMargins) / columns;
+
+    const usableHeight = totalHeight - topMargin - bottomMargin;
+    const labelHeight = usableHeight / rows;
+
+    const maxLineWidth = labelWidth * 0.9;
 
     data.forEach((row, index) => {
         let col = index % columns;
         let rowNum = Math.floor(index / columns);
+        if (rowNum >= rows) return;
 
-        if (rowNum >= rows) return; // Prevent extra rows
-
-        let x = col * labelWidth + labelWidth / 2;  
-        let y = rowNum * labelHeight + labelHeight / 2; 
+        // X starts with col index plus margins
+        let x = col * (labelWidth + columnMargin) + labelWidth / 2;
+        let y = topMargin + rowNum * labelHeight + labelHeight / 2;
 
         let text = Object.values(row).join(" ");
         let lines = wrapText(ctx, text, maxLineWidth);
+        let lineHeight = 80;
+        let startY = y - (lines.length - 1) * lineHeight / 2;
 
-        let lineHeight = 80; // Line spacing
-        let startY = y - (lines.length - 1) * lineHeight / 2; // Center the text block
+        // Draw label border for debug
+        const labelX = col * (labelWidth + columnMargin);
+        const labelY = topMargin + rowNum * labelHeight;
+        ctx.strokeStyle = "#ccc";
+        ctx.strokeRect(labelX, labelY, labelWidth, labelHeight);
 
+        // Draw text
         lines.forEach((line, i) => {
             ctx.fillText(line, x, startY + i * lineHeight);
         });
     });
 }
+
+
 
 function wrapText(ctx, text, maxWidth) {
     let words = text.split(" ");
