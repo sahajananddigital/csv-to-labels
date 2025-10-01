@@ -56,7 +56,7 @@ function drawLabels(data) {
     const ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "black";
-    ctx.font = "70px Arial";
+    ctx.font = "700 70px baloo";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
 
@@ -91,7 +91,7 @@ function drawLabels(data) {
 
         let text = Object.values(row).join(" ");
         let lines = wrapText(ctx, text, maxLineWidth);
-        let lineHeight = 80;
+        let lineHeight = 90;
         let startY = y - (lines.length - 1) * lineHeight / 2;
 
         // Draw label border for debug
@@ -147,3 +147,25 @@ function downloadPDF() {
     pdf.addImage(imgData, "PNG", 0, 0, 210, 297);
     pdf.save("labels.pdf");
 }
+
+async function loadFonts() {
+  // const font = new FontFace("baloo", "url(BalooBhai2-Medium.ttf)", {
+  //   style: "normal",
+  //   weight: "400",
+  //   stretch: "condensed",
+  // });
+  
+  const font = new FontFace("baloo", "url(./fonts/BalooBhai2-Bold.ttf)", {
+    style: "normal",
+    weight: "400",
+    stretch: "condensed",
+  });
+  
+  // wait for font to be loaded
+  await font.load();
+  // add font to document
+  document.fonts.add(font);
+  // enable font with CSS class
+  document.body.classList.add("fonts-loaded");
+}
+loadFonts();
