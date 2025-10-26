@@ -55,7 +55,7 @@ function drawLabels(data) {
     const canvas = document.getElementById("labelsCanvas");
     const ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "black";
+    ctx.fillStyle = "#782718";
     ctx.font = "700 70px baloo";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
